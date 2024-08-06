@@ -1,21 +1,25 @@
 package ru.job4j.todo.service;
 
+import lombok.AllArgsConstructor;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.repository.TaskRepository;
 
 import java.util.Collection;
 import java.util.Optional;
 
+@Service
+@AllArgsConstructor
 public class SimpleTaskService implements TaskService {
 
     private final TaskRepository taskRepository;
 
-    public SimpleTaskService(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
+    private final SessionFactory sessionFactory;
 
     @Override
     public Optional<Task> findById(int id) {
+        sessionFactory.getCache();
         return taskRepository.findById(id);
     }
 

@@ -6,21 +6,19 @@ package ru.job4j.todo.repository;
 //import org.springframework.stereotype.Repository;
 //import ru.job4j.todo.model.Task;
 
+import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 
 import java.util.Collection;
 import java.util.Optional;
 
-//@Repository
-//@AllArgsConstructor
+@Repository
+@AllArgsConstructor
 public class HbnTaskRepository implements TaskRepository {
 
     private final SessionFactory sf;
-
-    public HbnTaskRepository(SessionFactory sf) {
-        this.sf = sf;
-    }
 
     @Override
     public Optional<Task> findById(int id) {
