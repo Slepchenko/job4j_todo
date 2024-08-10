@@ -3,18 +3,27 @@ package ru.job4j.todo.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import ru.job4j.todo.service.SimpleTaskService;
+import org.springframework.web.bind.annotation.*;
+import ru.job4j.todo.model.Task;
+import ru.job4j.todo.service.TaskService;
 
 @Controller
+@RequestMapping("/tasks")
 @AllArgsConstructor
 public class TaskController {
 
-    private final SimpleTaskService simpleTaskService;
+    private final TaskService taskService;
 
-    @GetMapping("/index")
-    public String getIndex(Model model) {
-        return "index";
+    @PostMapping("/save")
+    public String save(@ModelAttribute Task task) {
+        taskService.save(task);
+        return "redirect:/tasks/tasksPage";
+    }
+
+    @GetMapping("/tasksPage")
+    public String tasks(Model model) {
+//        model.addAttribute(taskService.findAll());
+        return "tasks/tasks";
     }
 
 }

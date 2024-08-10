@@ -7,6 +7,7 @@ package ru.job4j.todo.repository;
 //import ru.job4j.todo.model.Task;
 
 import lombok.AllArgsConstructor;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
@@ -42,6 +43,16 @@ public class HbnTaskRepository implements TaskRepository {
 
     @Override
     public Task save(Task task) {
+        Session session = sf.openSession();
+        try {
+            session.beginTransaction();
+            session.save(task);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
         return null;
     }
 

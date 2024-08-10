@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" xmlns:th="" xmlns:text-align="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <title>Todo list</title>
+    <style>
+      input[type="radio"] {
+            display: none;
+        }
+
+        /* Стилизуем кнопки */
+        label {
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            background-color: #FFFFFF;
+            color: #000;
+            cursor: pointer;
+            margin-right: 5px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        /* Стиль активной кнопки */
+        input[type="radio"]:checked + label {
+            background-color: #DDDDDD;
+            color: #000;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="container-fluid p-0">
+    <form class="mt-3" th:action="@{/tasks/save}" method="post" enctype="multipart/form-data">
+        <div style="padding-left: 100px;">
+            <h3>Список дел</h3>
+            <div class="d-flex align-items-center">
+                <div class="col-auto">
+                    <button><a class="btn btn-success" type="submit">＋</a></button>
+                </div>
+                <div class="col-auto ml-n2">
+                    <input type="text" class="form-control" id="description" name="description" placeholder="Введите задачу" required
+                           style="width: 420px;">
+                </div>
+            </div>
+            <br>
+            <div class="d-flex align-items-center">
+                <input type="radio" id="all-tasks" name="task-status" checked>
+                <label for="all-tasks">Все задания</label>
+
+                <input type="radio" id="new-tasks" name="task-status">
+                <label for="new-tasks">Новые задания</label>
+
+                <input type="radio" id="completed-tasks" name="task-status">
+                <label for="completed-tasks">Выполненные задания</label>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

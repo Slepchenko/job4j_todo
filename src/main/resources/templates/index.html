@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="">
+<html lang="en" xmlns:th="" xmlns:text-align="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,15 +14,22 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-    <title>Todo list</title>
+    <title>index</title>
+
 </head>
 <body>
 <div class="container-fluid p-0">
-        <div class="container mt-2">
-        <h3>Test page</h3>
-        <ul>
+    <div style="text-align: center;">
+        <h3 class="">Добро пожаловать в приложение Todo List.</h3>
+    </div>
+    <div>В этом приложении Вы сможете создавать задания.</div>
+    <div>Чтобы перейти к списку дел, нажмите на кнопку ниже "Перейти"</div>
+    <hr>
+    <div>
+        <div class="col-auto">
+            <a class="btn btn-primary" th:href="@{tasks/tasksPage}">Перейти</a>
+        </div>
 
-        </ul>
     </div>
 </div>
 </body>
