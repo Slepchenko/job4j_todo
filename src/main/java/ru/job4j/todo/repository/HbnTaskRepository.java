@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -28,7 +29,17 @@ public class HbnTaskRepository implements TaskRepository {
 
     @Override
     public Collection<Task> findAll() {
-        return null;
+        try (Session session = sf.openSession()) {
+            List<Task> tasks;
+            session.beginTransaction();
+            tasks = session.createQuery("from Task", Task.class)
+                    .getResultList();
+            session.getTransaction().commit();
+            return List.copyOf(tasks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return List.of();
     }
 
     @Override

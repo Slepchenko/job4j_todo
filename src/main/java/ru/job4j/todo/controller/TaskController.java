@@ -15,14 +15,18 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Task task) {
+    public String save(Model model, @ModelAttribute Task task) {
+        if (task == null) {
+            model.addAttribute("message", "Ошибка добавления задания");
+            return "errors/404";
+        }
         taskService.save(task);
         return "redirect:/tasks/tasksPage";
     }
 
     @GetMapping("/tasksPage")
     public String tasks(Model model) {
-//        model.addAttribute(taskService.findAll());
+        model.addAttribute("tasks", taskService.findAll());
         return "tasks/tasks";
     }
 
