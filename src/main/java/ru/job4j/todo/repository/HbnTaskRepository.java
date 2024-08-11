@@ -44,12 +44,32 @@ public class HbnTaskRepository implements TaskRepository {
 
     @Override
     public Collection<Task> findDone() {
-        return null;
+        try (Session session = sf.openSession()) {
+            List<Task> tasks;
+            session.beginTransaction();
+            tasks = session.createQuery("from Task where done = true", Task.class)
+                    .getResultList();
+            session.getTransaction().commit();
+            return List.copyOf(tasks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return List.of();
     }
 
     @Override
     public Collection<Task> findNew() {
-        return null;
+        try (Session session = sf.openSession()) {
+            List<Task> tasks;
+            session.beginTransaction();
+            tasks = session.createQuery("from Task where done = false", Task.class)
+                    .getResultList();
+            session.getTransaction().commit();
+            return List.copyOf(tasks);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return List.of();
     }
 
     @Override

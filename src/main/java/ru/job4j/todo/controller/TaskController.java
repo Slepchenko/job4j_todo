@@ -21,12 +21,25 @@ public class TaskController {
             return "errors/404";
         }
         taskService.save(task);
-        return "redirect:/tasks/tasksPage";
+        return "redirect:/tasks/allTasks";
+
     }
 
-    @GetMapping("/tasksPage")
+    @GetMapping("/allTasks")
     public String tasks(Model model) {
         model.addAttribute("tasks", taskService.findAll());
+        return "tasks/tasks";
+    }
+
+    @GetMapping("/newTasks")
+    public String newTasks(Model model) {
+        model.addAttribute("tasks", taskService.findNew());
+        return "tasks/tasks";
+    }
+
+    @GetMapping("/doneTasks")
+    public String doneTasks(Model model) {
+        model.addAttribute("tasks", taskService.findDone());
         return "tasks/tasks";
     }
 
