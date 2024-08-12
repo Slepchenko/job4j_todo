@@ -19,7 +19,7 @@ public interface TaskRepository {
 
     boolean deleteById(int id);
 
-    boolean update(int id);
+    boolean update(Task task);
 
     boolean changeStatusToTrue(int id);
 

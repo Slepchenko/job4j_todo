@@ -19,7 +19,7 @@ public interface TaskService {
 
     boolean delete(int id);
 
-    boolean update(int id);
+    boolean update(Task task);
 
     boolean changeStatusToTrue(int id);
 

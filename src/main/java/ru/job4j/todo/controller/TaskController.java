@@ -57,8 +57,22 @@ public class TaskController {
     }
 
     @GetMapping("/changeStatus/{id}")
-    public String changeStatus(Model model, @PathVariable int id) {
+    public String changeStatus(@PathVariable int id) {
         taskService.changeStatusToTrue(id);
+        return "redirect:/tasks/allTasks";
+    }
+
+    @GetMapping("/updatePage/{id}")
+    public String updatePage(Model model, @PathVariable int id) {
+        model.addAttribute("task", taskService.findById(id).get());
+        System.err.println("voshol v updatePage/{id}");
+        return "/tasks/update";
+    }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute Task task, Model model) {
+        System.err.println("================" + task.getName());
+        taskService.update(task);
         return "redirect:/tasks/allTasks";
     }
 

@@ -43,7 +43,7 @@ public class HbnTaskRepository implements TaskRepository {
         try (Session session = sf.openSession()) {
             List<Task> tasks;
             session.beginTransaction();
-            tasks = session.createQuery("from Task", Task.class)
+            tasks = session.createQuery("from Task order by created", Task.class)
                     .getResultList();
             session.getTransaction().commit();
             return List.copyOf(tasks);
@@ -58,7 +58,7 @@ public class HbnTaskRepository implements TaskRepository {
         try (Session session = sf.openSession()) {
             List<Task> tasks;
             session.beginTransaction();
-            tasks = session.createQuery("from Task where done = true", Task.class)
+            tasks = session.createQuery("from Task where done = true order by created", Task.class)
                     .getResultList();
             session.getTransaction().commit();
             return List.copyOf(tasks);
@@ -73,7 +73,7 @@ public class HbnTaskRepository implements TaskRepository {
         try (Session session = sf.openSession()) {
             List<Task> tasks;
             session.beginTransaction();
-            tasks = session.createQuery("from Task where done = false", Task.class)
+            tasks = session.createQuery("from Task where done = false order by created", Task.class)
                     .getResultList();
             session.getTransaction().commit();
             return List.copyOf(tasks);
@@ -104,7 +104,19 @@ public class HbnTaskRepository implements TaskRepository {
     }
 
     @Override
-    public boolean update(int id) {
+    public boolean update(Task task) {
+        try (Session session = sf.openSession()) {
+            session.beginTransaction();
+            session.createQuery("update from Task set name = :fName, description = :fDescription where id = :fId")
+                    .setParameter("fId", task.getId())
+                    .setParameter("fName", task.getName())
+                    .setParameter("fDescription", task.getDescription())
+                    .executeUpdate();
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 

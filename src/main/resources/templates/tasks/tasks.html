@@ -23,7 +23,7 @@
             <h3>Список дел</h3>
             <div class="d-flex align-items-center">
                 <div class="col-auto">
-                    <button><a class="btn btn-success" type="submit">＋</a></button>
+                    <button><a class="btn btn-success" type="submit">&#9997;</a></button>
                 </div>
                 <div class="col-auto ml-n2">
                     <input type="text" class="form-control" id="name" name="name" placeholder="Краткое описание задания" required
@@ -48,7 +48,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="task: ${tasks}">
-                            <td> <a th:text="${task.name}" th:href="@{/tasks/{taskId}(taskId=${task.id})}"></a></td>
+                            <td><a th:text="${task.name}" th:href="@{/tasks/{taskId}(taskId=${task.id})}"></a></td>
                             <td th:text="${task.created}"></td>
                             <td th:if="${task.done == true}">&#9989;</td>
                             <td th:if="${task.done == false}">Ожидание выполнения</td>
