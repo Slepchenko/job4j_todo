@@ -17,6 +17,10 @@ public interface TaskService {
 
     Task save(Task task);
 
-    boolean deleteById(int id);
+    boolean delete(int id);
+
+    boolean update(int id);
+
+    boolean changeStatusToTrue(int id);
 
 }

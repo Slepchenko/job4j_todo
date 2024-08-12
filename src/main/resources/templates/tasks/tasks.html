@@ -14,7 +14,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-    <title>Todo list</title>
+    <title>Список заданий</title>
 </head>
 <body>
 <div class="container-fluid p-0">
@@ -32,11 +32,9 @@
             </div>
             <br>
             <div class="d-flex align-items-center">
-
                 <div class="col-3"><a class="btn btn-info w-100" th:href="@{/tasks/allTasks}">Все задания</a></div>
                 <div class="col-3"><a class="btn btn-info w-100" th:href="@{/tasks/newTasks}">Новые задания</a></div>
                 <div class="col-3"><a class="btn btn-info w-100" th:href="@{/tasks/doneTasks}">Выполненные задания</a></div>
-
             </div>
             <div class="container">
                 <div class="row">
@@ -50,9 +48,10 @@
                         </thead>
                         <tbody>
                         <tr th:each="task: ${tasks}">
-                            <td th:text="${task.name}"></td>
+                            <td> <a th:text="${task.name}" th:href="@{/tasks/{taskId}(taskId=${task.id})}"></a></td>
                             <td th:text="${task.created}"></td>
                             <td th:if="${task.done == true}">&#9989;</td>
+                            <td th:if="${task.done == false}">Ожидание выполнения</td>
                         </tr>
                         </tbody>
                     </table>

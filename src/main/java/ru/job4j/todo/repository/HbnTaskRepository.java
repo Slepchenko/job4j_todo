@@ -24,6 +24,17 @@ public class HbnTaskRepository implements TaskRepository {
 
     @Override
     public Optional<Task> findById(int id) {
+        try (Session session = sf.openSession()) {
+            Task task;
+            session.beginTransaction();
+            task = session.createQuery("from Task where id = :fId", Task.class)
+                    .setParameter("fId", id)
+                    .getSingleResult();
+            session.getTransaction().commit();
+            return Optional.of(task);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return Optional.empty();
     }
 
@@ -91,4 +102,25 @@ public class HbnTaskRepository implements TaskRepository {
     public boolean deleteById(int id) {
         return false;
     }
+
+    @Override
+    public boolean update(int id) {
+        return false;
+    }
+
+    @Override
+    public boolean changeStatusToTrue(int id) {
+        try (Session session = sf.openSession()) {
+            session.beginTransaction();
+            session.createQuery("update from Task set done = true where id = :fId")
+                    .setParameter("fId", id)
+                    .executeUpdate();
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

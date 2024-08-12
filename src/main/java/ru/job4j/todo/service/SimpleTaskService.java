@@ -1,7 +1,6 @@
 package ru.job4j.todo.service;
 
 import lombok.AllArgsConstructor;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.repository.TaskRepository;
@@ -15,11 +14,8 @@ public class SimpleTaskService implements TaskService {
 
     private final TaskRepository taskRepository;
 
-    private final SessionFactory sessionFactory;
-
     @Override
     public Optional<Task> findById(int id) {
-        sessionFactory.getCache();
         return taskRepository.findById(id);
     }
 
@@ -44,7 +40,18 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean delete(int id) {
         return taskRepository.deleteById(id);
     }
+
+    @Override
+    public boolean update(int id) {
+        return taskRepository.update(id);
+    }
+
+    @Override
+    public boolean changeStatusToTrue(int id) {
+        return taskRepository.changeStatusToTrue(id);
+    }
+
 }
