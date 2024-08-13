@@ -16,17 +16,6 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @PostMapping("/save")
-    public String save(Model model, @ModelAttribute Task task) {
-        if (task == null) {
-            model.addAttribute("message", "Ошибка добавления задания");
-            return "errors/404";
-        }
-        taskService.save(task);
-        return "redirect:/tasks/allTasks";
-
-    }
-
     @GetMapping("/allTasks")
     public String tasks(Model model) {
         model.addAttribute("tasks", taskService.findAll());
@@ -45,6 +34,17 @@ public class TaskController {
         return "tasks/tasks";
     }
 
+    @PostMapping("/save")
+    public String save(Model model, @ModelAttribute Task task) {
+        try {
+            taskService.save(task);
+            return "redirect:/tasks/allTasks";
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            return "errors/404";
+        }
+    }
+
     @GetMapping("/{id}")
     public String task(Model model, @PathVariable int id) {
         Optional<Task> optionalTask = taskService.findById(id);
@@ -52,36 +52,53 @@ public class TaskController {
             model.addAttribute("message", "Задача не найдена");
             return "errors/404";
         }
-        model.addAttribute("task", taskService.findById(id).get());
+        model.addAttribute("task", optionalTask.get());
         return "tasks/task";
     }
 
     @GetMapping("/changeStatus/{id}")
-    public String changeStatus(@PathVariable int id) {
-        taskService.changeStatusToTrue(id);
+    public String changeStatus(@PathVariable int id, Model model) {
+        boolean isChangedStatus = taskService.changeStatusToTrue(id);
+        if (!isChangedStatus) {
+            model.addAttribute("message", "Изменить статус выполнения задачи не удалось");
+            return "tasks/tasks";
+        }
         return "redirect:/tasks/allTasks";
     }
 
     @GetMapping("/updatePage/{id}")
     public String updatePage(Model model, @PathVariable int id) {
-        model.addAttribute("task", taskService.findById(id).get());
+        Optional<Task> optionalTask = taskService.findById(id);
+        if (optionalTask.isEmpty()) {
+            model.addAttribute("message", "Задача не найдена");
+            return "tasks/tasks";
+        }
+        model.addAttribute("task", optionalTask.get());
         return "/tasks/update";
     }
 
     @PostMapping("/update")
     public String update(@ModelAttribute Task task, Model model) {
-        taskService.update(task);
-        return "redirect:/tasks/allTasks";
+        try {
+            boolean isUpdated = taskService.update(task);
+            if (!isUpdated) {
+                model.addAttribute("message", "Редактирование не удалось");
+                return "errors/404";
+            }
+            return "redirect:/tasks/allTasks";
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            return "errors/404";
+        }
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable int id, Model model) {
-        Optional<Task> optionalTask = taskService.findById(id);
-        if (optionalTask.isEmpty()){
-            model.addAttribute("message", "Задача не найдена");
-            return "tasks/task";
+        boolean isDeleted = taskService.delete(id);
+        if (!isDeleted) {
+            model.addAttribute("message", "Удаление не удалось");
+            return "tasks/tasks";
         }
-        taskService.delete(id);
         return "redirect:/tasks/allTasks";
     }
 
