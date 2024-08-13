@@ -19,12 +19,12 @@
 <body>
 <div class="container-fluid p-0">
     <div>
-        <h2 th:text="${task.name}"></h2>
+        <h2 th:text="${task.name}" style="margin-bottom: 40px;"></h2>
         <div class="col-2"><a class="btn btn-success w-100" th:href="@{/tasks/changeStatus/{id}(id=${task.id})}">Выполнено</a>
         </div>
         <br>
         <hr th:text="${task.created}">
-        <hr th:text="${task.description}">
+        <hr th:text="${task.description}" style="margin-bottom: 40px;">
         <br>
         <div class="mb-3 row">
             <div class="col-6"></div>
@@ -33,12 +33,12 @@
                     <div class="col-3"><a class="btn btn-warning w-100"
                                           th:href="@{/tasks/updatePage/{id}(id=${task.id})}">Редактировать</a></div>
                     <div class="col-3"><a class="btn btn-danger w-100"
-                                          th:href="@{/tasks/changeStatus/{id}(id=${task.id})}">Удалить</a></div>
+                                          th:href="@{/tasks/delete/{id}(id=${task.id})}">Удалить</a></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
+
 </body>
 </html>

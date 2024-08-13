@@ -100,6 +100,16 @@ public class HbnTaskRepository implements TaskRepository {
 
     @Override
     public boolean deleteById(int id) {
+        try (Session session = sf.openSession()) {
+            session.beginTransaction();
+            session.createQuery("delete from Task where id = :fId")
+                    .setParameter("fId", id)
+                    .executeUpdate();
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 

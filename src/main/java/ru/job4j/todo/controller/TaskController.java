@@ -65,14 +65,23 @@ public class TaskController {
     @GetMapping("/updatePage/{id}")
     public String updatePage(Model model, @PathVariable int id) {
         model.addAttribute("task", taskService.findById(id).get());
-        System.err.println("voshol v updatePage/{id}");
         return "/tasks/update";
     }
 
     @PostMapping("/update")
     public String update(@ModelAttribute Task task, Model model) {
-        System.err.println("================" + task.getName());
         taskService.update(task);
+        return "redirect:/tasks/allTasks";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable int id, Model model) {
+        Optional<Task> optionalTask = taskService.findById(id);
+        if (optionalTask.isEmpty()){
+            model.addAttribute("message", "Задача не найдена");
+            return "tasks/task";
+        }
+        taskService.delete(id);
         return "redirect:/tasks/allTasks";
     }
 
