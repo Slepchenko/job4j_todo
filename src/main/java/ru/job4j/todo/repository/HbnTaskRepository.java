@@ -1,11 +1,5 @@
 package ru.job4j.todo.repository;
 
-//import lombok.AllArgsConstructor;
-//import org.hibernate.Session;
-//import org.hibernate.SessionFactory;
-//import org.springframework.stereotype.Repository;
-//import ru.job4j.todo.model.Task;
-
 import lombok.AllArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
