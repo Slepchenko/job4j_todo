@@ -79,64 +79,64 @@ public class HbnTaskRepository implements TaskRepository {
 
     @Override
     public Task save(Task task) {
-        Session session = sf.openSession();
-        try {
+        try (Session session = sf.openSession()) {
             session.beginTransaction();
             session.save(task);
             session.getTransaction().commit();
+            return task;
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            session.close();
         }
         return null;
     }
 
     @Override
     public boolean deleteById(int id) {
+        int isDeleted = 0;
         try (Session session = sf.openSession()) {
             session.beginTransaction();
-            session.createQuery("delete from Task where id = :fId")
+            isDeleted = session
+                    .createQuery("delete from Task where id = :fId")
                     .setParameter("fId", id)
                     .executeUpdate();
             session.getTransaction().commit();
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return isDeleted > 1;
     }
 
     @Override
     public boolean update(Task task) {
+        int isUpdated = 0;
         try (Session session = sf.openSession()) {
             session.beginTransaction();
-            session.createQuery("update from Task set name = :fName, description = :fDescription where id = :fId")
+            isUpdated = session
+                    .createQuery("update from Task set name = :fName, description = :fDescription where id = :fId")
                     .setParameter("fId", task.getId())
                     .setParameter("fName", task.getName())
                     .setParameter("fDescription", task.getDescription())
                     .executeUpdate();
             session.getTransaction().commit();
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return isUpdated > 0;
     }
 
     @Override
     public boolean changeStatusToTrue(int id) {
+        int isChanged = 0;
         try (Session session = sf.openSession()) {
             session.beginTransaction();
-            session.createQuery("update from Task set done = true where id = :fId")
+            isChanged = session.createQuery("update from Task set done = true where id = :fId")
                     .setParameter("fId", id)
                     .executeUpdate();
             session.getTransaction().commit();
-            return true;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return isChanged > 0;
     }
 
 }
