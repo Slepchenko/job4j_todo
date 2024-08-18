@@ -79,13 +79,16 @@ public class HbnTaskRepository implements TaskRepository {
 
     @Override
     public Task save(Task task) {
-        try (Session session = sf.openSession()) {
+        Session session = sf.openSession();
+        try {
             session.beginTransaction();
             session.save(task);
             session.getTransaction().commit();
             return task;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            session.close();
         }
         return null;
     }
@@ -103,7 +106,7 @@ public class HbnTaskRepository implements TaskRepository {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return isDeleted > 1;
+        return isDeleted > 0;
     }
 
     @Override

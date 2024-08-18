@@ -43,6 +43,9 @@ public class TaskController {
     @GetMapping("/{id}")
     public String task(Model model, @PathVariable int id) {
         Optional<Task> optionalTask = taskService.findById(id);
+        if (optionalTask.isEmpty()) {
+            return "tasks/tasks";
+        }
         model.addAttribute("task", optionalTask.get());
         return "tasks/task";
     }
@@ -50,25 +53,37 @@ public class TaskController {
     @GetMapping("/changeStatus/{id}")
     public String changeStatus(@PathVariable int id) {
         boolean isChangedStatus = taskService.changeStatusToTrue(id);
+        if (!isChangedStatus) {
+            return "tasks/tasks";
+        }
         return "redirect:/tasks/allTasks";
     }
 
     @GetMapping("/updatePage/{id}")
     public String updatePage(Model model, @PathVariable int id) {
         Optional<Task> optionalTask = taskService.findById(id);
+        if (optionalTask.isEmpty()) {
+            return "tasks/tasks";
+        }
         model.addAttribute("task", optionalTask.get());
         return "/tasks/update";
     }
 
     @PostMapping("/update")
     public String update(@ModelAttribute Task task) {
-        taskService.update(task);
-        return "redirect:/tasks/allTasks";
+            boolean isUpdated = taskService.update(task);
+            if (!isUpdated) {
+                return "tasks/tasks";
+            }
+            return "redirect:/tasks/allTasks";
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable int id) {
-        taskService.delete(id);
+        boolean isDeleted = taskService.delete(id);
+        if (!isDeleted) {
+            return "tasks/tasks";
+        }
         return "redirect:/tasks/allTasks";
     }
 
