@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class User {
+public class TodoUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

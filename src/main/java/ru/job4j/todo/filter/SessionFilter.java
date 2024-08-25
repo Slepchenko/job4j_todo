@@ -2,7 +2,7 @@ package ru.job4j.todo.filter;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import ru.job4j.todo.model.User;
+import ru.job4j.todo.model.TodoUser;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -24,9 +24,9 @@ public class SessionFilter extends HttpFilter {
     }
 
     private void addUserToSession(HttpSession session, HttpServletRequest request) {
-        User user = (User) session.getAttribute("user");
+        TodoUser user = (TodoUser) session.getAttribute("user");
         if (user == null) {
-            user = new User();
+            user = new TodoUser();
             user.setName("Гость");
         }
         request.setAttribute("user", user);
