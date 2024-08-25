@@ -42,20 +42,18 @@ public class HbnTaskRepository implements TaskRepository {
 
     @Override
     public boolean deleteById(int id) {
-        crudRepository.run("delete from Task where id = :fId", Map.of("fId", id));
-        return true;
+        return crudRepository.query("delete from Task where id = :fId", Map.of("fId", id));
     }
 
     @Override
     public boolean update(Task task) {
-       crudRepository.run(session -> session.merge(task));
-       return true;
+        return crudRepository.query("update from Task set name = :fName, description = :fDescription where id = :fId",
+                Map.of("fName", task.getName(), "fDescription", task.getDescription(), "fId", task.getId()));
     }
 
     @Override
     public boolean changeStatusToTrue(int id) {
-        crudRepository.run("update from Task set done = true where id = :fId", Map.of("fId", id));
-        return true;
+        return crudRepository.query("update from Task set done = true where id = :fId", Map.of("fId", id));
     }
 
 }

@@ -46,11 +46,18 @@
                 <div class="col">
                     <a class="btn w-100"
                        th:href="@{/tasks/updatePage/{id}(id=${task.id})}"
-                       style="background-color: #99CCFF; color: black;">Редактировать</a>
+                       style="background-color: #99CCFF; color: black;">Редактировать
+                    </a>
                 </div>
-                <div class="col ms-2"><a class="btn w-100"
-                                         th:href="@{/tasks/delete/{id}(id=${task.id})}"
-                                         style="background-color: #FF6633; color: black;">Удалить</a>
+                <div class="col ms-2">
+                    <a class="btn w-100"
+                       th:href="@{/tasks/delete/{id}(id=${task.id})}"
+                       style="background-color: #FF6633; color: black;">Удалить
+                    </a>
+                </div>
+                <div class="col ms-2">
+                    <a class="btn" th:href="@{/tasks/allTasks}"
+                       style="background-color: #F0F8FF; color: black;">Назад</a>
                 </div>
             </div>
         </div>

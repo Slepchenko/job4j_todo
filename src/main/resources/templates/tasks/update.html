@@ -36,13 +36,14 @@
         </nav>
         <form class="mt-3" th:action="@{/tasks/update}" method="post" enctype="multipart/form-data">
             <input type="hidden" class="form-control" id="id" name="id" th:value="${task.id}"/>
+            <input type="hidden" class="form-control" id="done" name="done" th:value="${task.done}"/>
             <div class="mb-3">
                 <input type="text" class="form-control" id="name" name="name"
                        th:value="${task.name}">
             </div>
             <div class="mb-3">
                 <textarea class="form-control" id="description" name="description" rows="25"
-                          placeholder="Подробное описание задачи"></textarea>
+                          placeholder="Подробное описание задачи" th:text="${task.description}"></textarea>
             </div>
             <div class="mb-4 row">
                 <div class="col-6">

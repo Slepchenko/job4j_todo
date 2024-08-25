@@ -75,7 +75,7 @@ public class TaskController {
             if (!isUpdated) {
                 return "tasks/tasks";
             }
-            return "redirect:/tasks/allTasks";
+            return "tasks/task";
     }
 
     @GetMapping("/delete/{id}")
