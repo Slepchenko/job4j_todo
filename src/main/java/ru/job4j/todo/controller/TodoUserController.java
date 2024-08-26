@@ -7,46 +7,46 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.job4j.todo.model.User;
-import ru.job4j.todo.service.UserService;
+import ru.job4j.todo.model.TodoUser;
+import ru.job4j.todo.service.TodoUserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/todo_users")
 @AllArgsConstructor
-public class UserController {
+public class TodoUserController {
 
-    private final UserService userService;
+    private final TodoUserService userService;
 
     @GetMapping("/register")
     public String getRegistrationPage() {
-        return "/users/register";
+        return "/todo_users/register";
     }
 
     @PostMapping("/register")
-    public String register(Model model, @ModelAttribute User user) {
-        Optional<User> optionalUser = userService.save(user);
+    public String register(Model model, @ModelAttribute TodoUser user) {
+        Optional<TodoUser> optionalUser = userService.save(user);
         if (optionalUser.isEmpty()) {
             model.addAttribute("message", "Пользователь с таким логином уже существует");
             return "errors/404";
         }
-        return "/users/login";
+        return "/todo_users/login";
     }
 
     @GetMapping("/login")
     public String getLoginPage() {
-        return "/users/login";
+        return "/todo_users/login";
     }
 
     @PostMapping("/login")
-    public String loginUser(@ModelAttribute User user, Model model, HttpServletRequest request) {
-        Optional<User> optionalUser = userService.findByLoginAndPassword(user.getLogin(), user.getPassword());
+    public String loginUser(@ModelAttribute TodoUser user, Model model, HttpServletRequest request) {
+        Optional<TodoUser> optionalUser = userService.findByLoginAndPassword(user.getLogin(), user.getPassword());
         if (optionalUser.isEmpty()) {
             model.addAttribute("error", "Логин или пароль введены неверно");
-            return "/users/login";
+            return "/todo_users/login";
         }
         HttpSession session = request.getSession();
         session.setAttribute("user", optionalUser.get());
@@ -56,7 +56,7 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/users/login";
+        return "redirect:/todo_users/login";
     }
 
 }
