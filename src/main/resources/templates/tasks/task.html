@@ -32,8 +32,10 @@
     <div>
         <div style="display: flex; align-items: center; gap: 10px;">
             <h2 th:text="${task.name}" style="margin-bottom: 0;"></h2>
-            <div class="col-2"><a class="btn w-10" th:href="@{/tasks/changeStatus/{id}(id=${task.id})}"
-                                  style="background-color: #4CAF50; color: white;">&#10003;</a>
+            <div class="col-2">
+                <a class="btn w-10" th:href="@{/tasks/changeStatus/{id}(id=${task.id})}"
+                                  style="background-color: #4CAF50; color: white;">&#10003;
+                </a>
             </div>
         </div>
         <br>
@@ -57,7 +59,8 @@
                 </div>
                 <div class="col ms-2">
                     <a class="btn" th:href="@{/tasks/allTasks}"
-                       style="background-color: #F0F8FF; color: black;">Назад</a>
+                       style="background-color: #F0F8FF; color: black;">Назад
+                    </a>
                 </div>
             </div>
         </div>
