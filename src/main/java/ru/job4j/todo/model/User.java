@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class TodoUser {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +22,9 @@ public class TodoUser {
     private String login;
 
     private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
 }
