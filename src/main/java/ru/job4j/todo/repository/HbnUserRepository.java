@@ -3,6 +3,7 @@ package ru.job4j.todo.repository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.RoleService;
 
 import java.util.Map;
 import java.util.Optional;
@@ -11,10 +12,13 @@ import java.util.Optional;
 @AllArgsConstructor
 public class HbnUserRepository implements UserRepository {
 
-private final CrudRepository crudRepository;
+    private final CrudRepository crudRepository;
+
+    private final RoleService roleService;
 
     @Override
     public Optional<User> save(User user) {
+        user.setRole(roleService.findByName("user").get());
         crudRepository.run(session -> session.persist(user));
         return Optional.of(user);
     }
