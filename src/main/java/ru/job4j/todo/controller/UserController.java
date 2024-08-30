@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.job4j.todo.model.Role;
+import ru.job4j.todo.filter.AddUserModel;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.RoleService;
 import ru.job4j.todo.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,13 +23,19 @@ public class UserController {
 
     private final UserService userService;
 
+    private final RoleService roleService;
+
+    public static final String USER = "user";
+
     @GetMapping("/register")
     public String getRegistrationPage() {
         return "/users/register";
     }
 
     @PostMapping("/register")
-    public String register(Model model, @ModelAttribute User user) {
+    public String register(Model model, HttpSession session, @ModelAttribute User user) {
+        AddUserModel.checkInMenu(model, session);
+        user.setRole(roleService.findByName(USER).get());
         Optional<User> optionalUser = userService.save(user);
         if (optionalUser.isEmpty()) {
             model.addAttribute("message", "Пользователь с таким логином уже существует");
