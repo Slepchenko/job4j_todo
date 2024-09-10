@@ -121,7 +121,7 @@ public class TaskController {
         if (!isUpdated) {
             return "tasks/tasks";
         }
-        return "tasks/task";
+        return "redirect:/tasks/" + task.getId();
     }
 
     @GetMapping("/delete/{id}")
