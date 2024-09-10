@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.filter.AddUserModel;
+import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
@@ -19,10 +21,13 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    private final PriorityService priorityService;
+
     @GetMapping("/allTasks")
     public String tasks(Model model, HttpSession session) {
         AddUserModel.checkInMenu(model, session);
         model.addAttribute("tasks", taskService.findAll());
+        model.addAttribute("priorities", priorityService.findAll());
         return "tasks/tasks";
     }
 
@@ -30,6 +35,7 @@ public class TaskController {
     public String newTasks(Model model, HttpSession session) {
         AddUserModel.checkInMenu(model, session);
         model.addAttribute("tasks", taskService.findNew());
+        model.addAttribute("priorities", priorityService.findAll());
         return "tasks/tasks";
     }
 
@@ -37,13 +43,26 @@ public class TaskController {
     public String doneTasks(Model model, HttpSession session) {
         AddUserModel.checkInMenu(model, session);
         model.addAttribute("tasks", taskService.findDone());
+        model.addAttribute("priorities", priorityService.findAll());
         return "tasks/tasks";
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Task task, Model model, HttpSession session) {
+    public String save(@ModelAttribute Task task,
+                       @RequestParam(name = "priority_status", defaultValue = "false") boolean isUrgentlyTask,
+                       Model model, HttpSession session) {
         AddUserModel.checkInMenu(model, session);
         task.setUser((User) session.getAttribute("user"));
+        Optional<Priority> optionalPriority;
+        if (isUrgentlyTask) {
+            optionalPriority = priorityService.getPriorityByName("urgently");
+        } else {
+            optionalPriority = priorityService.getPriorityByName("normal");
+        }
+        if (optionalPriority.isEmpty()) {
+            return "tasks/tasks";
+        }
+        task.setPriority(optionalPriority.get());
         taskService.save(task);
         return "redirect:/tasks/allTasks";
     }
@@ -55,8 +74,10 @@ public class TaskController {
         if (optionalTask.isEmpty()) {
             return "tasks/tasks";
         }
-        model.addAttribute("task", optionalTask.get());
-        model.addAttribute("responsible", optionalTask.get().getUser().getName());
+        Task task = optionalTask.get();
+        model.addAttribute("task", task);
+        model.addAttribute("responsible", task.getUser().getName());
+        model.addAttribute("priority", task.getPriority().getName());
         return "tasks/task";
     }
 
@@ -81,13 +102,26 @@ public class TaskController {
     }
 
     @PostMapping("/update")
-    public String update(Model model, HttpSession session, @ModelAttribute Task task) {
+    public String update(Model model,
+                         HttpSession session,
+                         @ModelAttribute Task task,
+                         @RequestParam(name = "priority_status", defaultValue = "false") boolean isPriorityUrgently) {
         AddUserModel.checkInMenu(model, session);
-            boolean isUpdated = taskService.update(task);
-            if (!isUpdated) {
-                return "tasks/tasks";
-            }
-            return "tasks/task";
+        Optional<Priority> priorityOptional;
+        if (isPriorityUrgently) {
+            priorityOptional = priorityService.getPriorityByName("urgently");
+        } else {
+            priorityOptional = priorityService.getPriorityByName("normal");
+        }
+        if (priorityOptional.isEmpty()) {
+            return "tasks/tasks";
+        }
+        task.setPriority(priorityOptional.get());
+        boolean isUpdated = taskService.update(task);
+        if (!isUpdated) {
+            return "tasks/tasks";
+        }
+        return "tasks/task";
     }
 
     @GetMapping("/delete/{id}")

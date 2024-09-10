@@ -30,8 +30,11 @@
         </div>
     </nav>
     <div>
-        <div class="col">Ответственный за выполнение:
-            <b><p th:text="${responsible}"></p></b>
+        <div class="col">Ответственный за выполнение
+            <b><span th:text="${responsible}"></span></b>
+        </div>
+        <div class="col">
+            <span th:if="${priority == 'urgently'}"><b>Срочная задача</b>&#10071;</span>
         </div>
         <br>
         <div style="display: flex; align-items: center; gap: 10px;">
@@ -57,13 +60,11 @@
                 </div>
                 <div class="col ms-2">
                     <a class="btn w-100"
-                       th:href="@{/tasks/delete/{id}(id=${task.id})}"
-                       style="background-color: #FF6633; color: black;">Удалить
+                       th:href="@{/tasks/delete/{id}(id=${task.id})}" style="background-color: #FF6633; color: black;">Удалить
                     </a>
                 </div>
                 <div class="col ms-2">
-                    <a class="btn" th:href="@{/tasks/allTasks}"
-                       style="background-color: #F0F8FF; color: black;">Назад
+                    <a class="btn" th:href="@{/tasks/allTasks}" style="background-color: #F0F8FF; color: black;">Назад
                     </a>
                 </div>
             </div>

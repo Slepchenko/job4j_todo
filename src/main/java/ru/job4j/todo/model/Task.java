@@ -11,20 +11,26 @@ import lombok.EqualsAndHashCode.Include;
 @Entity
 @Table(name = "tasks")
 public class Task {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Include
     private int id;
+
     private String name;
+
     private String description;
+
     private LocalDateTime created = LocalDateTime.now();
+
     private boolean done;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public boolean getDone() {
-        return done;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "priority_id")
+    private Priority priority;
 
 }

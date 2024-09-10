@@ -18,10 +18,6 @@
 </head>
 <body>
 <div class="container-fluid p-1">
-    <div class="container-fluid p-0">
-        <b><h1>Редактирование задачи</h1></b>
-    </div>
-    <br>
     <div class="col-6 ms-1">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="d-flex" th:if="${user.name == 'Гость'}">
@@ -34,6 +30,9 @@
                 <a class="nav-link text-secondary" th:href="@{/users/logout}">Выйти</a>
             </div>
         </nav>
+        <div class="container-fluid p-0">
+            <b><h1>Редактирование задачи</h1></b>
+        </div>
         <form class="mt-3" th:action="@{/tasks/update}" method="post" enctype="multipart/form-data">
             <input type="hidden" class="form-control" id="id" name="id" th:value="${task.id}"/>
             <input type="hidden" class="form-control" id="done" name="done" th:value="${task.done}"/>
@@ -44,6 +43,11 @@
             <div class="mb-3">
                 <textarea class="form-control" id="description" name="description" rows="25"
                           placeholder="Подробное описание задачи" th:text="${task.description}"></textarea>
+            </div>
+            <div class="form-check mb-3">
+                <input type="checkbox" name="priority_status" class="form-check-input" id="priority_status"
+                       th:checked="${task.priority.name == 'urgently'}">
+                <label class="form-check-label" for="priority_status">Срочная задача</label>
             </div>
             <div class="mb-4 row">
                 <div class="col-6">
