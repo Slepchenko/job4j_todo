@@ -53,16 +53,11 @@ public class TaskController {
                        Model model, HttpSession session) {
         AddUserModel.checkInMenu(model, session);
         task.setUser((User) session.getAttribute("user"));
-        Optional<Priority> optionalPriority;
         if (isUrgentlyTask) {
-            optionalPriority = priorityService.getPriorityByName("urgently");
+            task.setPriority(priorityService.getPriorityByName("urgently").get());
         } else {
-            optionalPriority = priorityService.getPriorityByName("normal");
+            task.setPriority(priorityService.getPriorityByName("normal").get());
         }
-        if (optionalPriority.isEmpty()) {
-            return "tasks/tasks";
-        }
-        task.setPriority(optionalPriority.get());
         taskService.save(task);
         return "redirect:/tasks/allTasks";
     }
@@ -105,18 +100,13 @@ public class TaskController {
     public String update(Model model,
                          HttpSession session,
                          @ModelAttribute Task task,
-                         @RequestParam(name = "priority_status", defaultValue = "false") boolean isPriorityUrgently) {
+                         @RequestParam(name = "priority_status", defaultValue = "false") boolean isUrgentlyTask) {
         AddUserModel.checkInMenu(model, session);
-        Optional<Priority> priorityOptional;
-        if (isPriorityUrgently) {
-            priorityOptional = priorityService.getPriorityByName("urgently");
+        if (isUrgentlyTask) {
+            task.setPriority(priorityService.getPriorityByName("urgently").get());
         } else {
-            priorityOptional = priorityService.getPriorityByName("normal");
+            task.setPriority(priorityService.getPriorityByName("normal").get());
         }
-        if (priorityOptional.isEmpty()) {
-            return "tasks/tasks";
-        }
-        task.setPriority(priorityOptional.get());
         boolean isUpdated = taskService.update(task);
         if (!isUpdated) {
             return "tasks/tasks";
