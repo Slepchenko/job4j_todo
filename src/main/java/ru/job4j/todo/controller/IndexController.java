@@ -15,7 +15,7 @@ public class IndexController {
     @GetMapping("/index")
     public String getIndex(Model model, HttpSession session) {
         AddUserModel.checkInMenu(model, session);
-        return "/index";
+        return "index";
     }
 
 }

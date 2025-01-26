@@ -36,6 +36,12 @@
         <div class="col">
             <span th:if="${priority == 'urgently'}"><b>Срочная задача</b>&#10071;</span>
         </div>
+
+<!--        categories info-->
+        <div th:each="category : ${categories}">
+            <div th:text="${category.name}"></div>
+        </div>
+
         <br>
         <div style="display: flex; align-items: center; gap: 10px;">
             <h2 th:text="${task.name}" style="margin-bottom: 0;"></h2>

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Task;
 
+import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -17,7 +18,9 @@ public class HbnTaskRepository implements TaskRepository {
     @Override
     public Optional<Task> findById(int id) {
         return crudRepository.optional(
-                "from Task f join fetch f.priority where f.id = :fId",
+                "from Task t "
+                        + "join fetch t.categories "
+                        + "join fetch t.priority where t.id = :fId",
                 Task.class,
                 Map.of("fId", id)
         );
@@ -26,15 +29,21 @@ public class HbnTaskRepository implements TaskRepository {
     @Override
     public Collection<Task> findAll() {
         return crudRepository.query(
-                "from Task f join fetch f.priority order by f.priority.id, created desc",
+                "select distinct t from Task t "
+                        + "join fetch t.priority "
+                        + "join fetch t.categories "
+                        + "order by t.priority.id, created desc",
                 Task.class
         );
     }
 
+    @Transactional
     @Override
     public Collection<Task> findDone() {
         return crudRepository.query(
-                "from Task f join fetch f.priority where done = true order by f.priority.id, created desc",
+                "select distinct t from Task t "
+                        + "join fetch t.priority "
+                        + "join fetch t.categories where done = true order by t.priority.id, created desc",
                 Task.class
         );
     }
@@ -42,7 +51,9 @@ public class HbnTaskRepository implements TaskRepository {
     @Override
     public Collection<Task> findNew() {
         return crudRepository.query(
-                "from Task f join fetch f.priority where done = false order by f.priority.id, created desc",
+                "select distinct t from Task t "
+                       + "join fetch t.priority "
+                       + "join fetch t.categories where t.done = false order by t.priority.id, created desc",
                 Task.class
         );
     }
@@ -65,7 +76,11 @@ public class HbnTaskRepository implements TaskRepository {
     public boolean update(Task task) {
         return crudRepository.query(
                 "update from Task set name = :fName, description = :fDescription, priority = :fPriority where id = :fId",
-                Map.of("fName", task.getName(), "fDescription", task.getDescription(), "fId", task.getId(), "fPriority", task.getPriority())
+                Map.of("fName",
+                        task.getName(),
+                        "fDescription",
+                        task.getDescription(),
+                        "fId", task.getId(), "fPriority", task.getPriority())
         );
     }
 
@@ -76,5 +91,7 @@ public class HbnTaskRepository implements TaskRepository {
                 Map.of("fId", id)
         );
     }
+
+
 
 }

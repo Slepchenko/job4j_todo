@@ -3,16 +3,24 @@ package ru.job4j.todo.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.filter.AddUserModel;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.repository.CategoryRepository;
+import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/tasks")
@@ -23,11 +31,14 @@ public class TaskController {
 
     private final PriorityService priorityService;
 
+    private final CategoryService categoryService;
+
     @GetMapping("/allTasks")
     public String tasks(Model model, HttpSession session) {
         AddUserModel.checkInMenu(model, session);
         model.addAttribute("tasks", taskService.findAll());
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/tasks";
     }
 
@@ -36,6 +47,7 @@ public class TaskController {
         AddUserModel.checkInMenu(model, session);
         model.addAttribute("tasks", taskService.findNew());
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/tasks";
     }
 
@@ -44,15 +56,33 @@ public class TaskController {
         AddUserModel.checkInMenu(model, session);
         model.addAttribute("tasks", taskService.findDone());
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/tasks";
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setDisallowedFields("categories");
     }
 
     @PostMapping("/save")
     public String save(@ModelAttribute Task task,
                        @RequestParam(name = "priority_status", defaultValue = "false") boolean isUrgentlyTask,
+                       @RequestParam(name = "categories", required = false) String[] categoryIds,
                        Model model, HttpSession session) {
         AddUserModel.checkInMenu(model, session);
         task.setUser((User) session.getAttribute("user"));
+
+        if (categoryIds != null && categoryIds.length != 0) {
+            List<Category> categoryList;
+            categoryList = Arrays.stream(categoryIds)
+                    .map(Integer::valueOf)
+                    .map(categoryService::getCategoryById)
+                    .map(Optional::get).toList();
+            task.setCategories(categoryList);
+        } else {
+            task.setCategories(new ArrayList<>());
+        }
         if (isUrgentlyTask) {
             task.setPriority(priorityService.getPriorityByName("urgently").get());
         } else {
@@ -73,6 +103,7 @@ public class TaskController {
         model.addAttribute("task", task);
         model.addAttribute("responsible", task.getUser().getName());
         model.addAttribute("priority", task.getPriority().getName());
+        model.addAttribute("categories", task.getCategories());
         return "tasks/task";
     }
 
