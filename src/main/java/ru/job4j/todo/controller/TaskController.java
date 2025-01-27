@@ -74,12 +74,13 @@ public class TaskController {
         task.setUser((User) session.getAttribute("user"));
 
         if (categoryIds != null && categoryIds.length != 0) {
-            List<Category> categoryList;
-            categoryList = Arrays.stream(categoryIds)
+            List<Category> allCategory = categoryService.findAll();
+            task.setCategories(Arrays.stream(categoryIds)
                     .map(Integer::valueOf)
-                    .map(categoryService::getCategoryById)
-                    .map(Optional::get).toList();
-            task.setCategories(categoryList);
+                    .flatMap(id -> allCategory
+                            .stream()
+                            .filter(cat -> cat.getId() == id))
+                    .collect(Collectors.toList()));
         } else {
             task.setCategories(new ArrayList<>());
         }
