@@ -5,22 +5,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import ru.job4j.todo.filter.AddUserModel;
-import ru.job4j.todo.model.Category;
-import ru.job4j.todo.model.Priority;
+import ru.job4j.todo.filter.AddUserModel;;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
-import ru.job4j.todo.repository.CategoryRepository;
 import ru.job4j.todo.service.CategoryService;
 import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/tasks")
@@ -74,13 +68,7 @@ public class TaskController {
         task.setUser((User) session.getAttribute("user"));
 
         if (categoryIds != null && categoryIds.length != 0) {
-            List<Category> allCategory = categoryService.findAll();
-            task.setCategories(Arrays.stream(categoryIds)
-                    .map(Integer::valueOf)
-                    .flatMap(id -> allCategory
-                            .stream()
-                            .filter(cat -> cat.getId() == id))
-                    .collect(Collectors.toList()));
+            task.setCategories(categoryService.findNecessaryCategories(categoryIds));
         } else {
             task.setCategories(new ArrayList<>());
         }

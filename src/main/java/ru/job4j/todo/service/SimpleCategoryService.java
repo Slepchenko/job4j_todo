@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Category;
 import ru.job4j.todo.repository.CategoryRepository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,11 @@ public class SimpleCategoryService implements CategoryService {
     @Override
     public List<Category> findAll() {
         return categoryRepository.findAll();
+    }
+
+    @Override
+    public List<Category> findNecessaryCategories(String[] categoryIds) {
+        return categoryRepository.findNecessaryCategories(Arrays.stream(categoryIds).map(Integer::valueOf).toList());
     }
 
     @Override

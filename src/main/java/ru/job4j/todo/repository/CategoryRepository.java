@@ -9,6 +9,8 @@ public interface CategoryRepository {
 
     List<Category> findAll();
 
+    List<Category> findNecessaryCategories(List<Integer> ids);
+
     Optional<Category> findCategoryByName(String name);
 
     Optional<Category> findCategoryById(int id);

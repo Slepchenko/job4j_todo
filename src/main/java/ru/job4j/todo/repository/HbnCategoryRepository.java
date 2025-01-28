@@ -16,9 +16,16 @@ public class HbnCategoryRepository implements CategoryRepository {
 
     @Override
     public List<Category> findAll() {
+        return crudRepository.query("from Category", Category.class);
+    }
+
+    @Override
+    public List<Category> findNecessaryCategories(List<Integer> ids) {
         return crudRepository.query(
-                "from Category",
-                Category.class);
+                "from Category c where c.id in (:ids)",
+                Category.class,
+                Map.of("ids", ids)
+        );
     }
 
     @Override

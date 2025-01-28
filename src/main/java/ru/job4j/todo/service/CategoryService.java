@@ -9,6 +9,8 @@ public interface CategoryService {
 
     List<Category> findAll();
 
+    List<Category> findNecessaryCategories(String[] categoryIds);
+
     Optional<Category> findCategoryByName(String name);
 
     Optional<Category> findCategoryById(int id);
