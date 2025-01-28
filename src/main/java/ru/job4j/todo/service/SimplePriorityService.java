@@ -20,8 +20,8 @@ public class SimplePriorityService implements PriorityService {
     }
 
     @Override
-    public Optional<Priority> getPriorityByName(String name) {
-        return priorityRepository.getPriorityByName(name);
+    public Optional<Priority> findPriorityByName(String name) {
+        return priorityRepository.findPriorityByName(name);
     }
 
 }

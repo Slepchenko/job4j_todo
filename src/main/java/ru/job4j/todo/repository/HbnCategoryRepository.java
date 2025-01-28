@@ -22,7 +22,7 @@ public class HbnCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public Optional<Category> getCategoryByName(String name) {
+    public Optional<Category> findCategoryByName(String name) {
         return crudRepository.optional(
                 "from Category where name = :fName",
                 Category.class,
@@ -30,7 +30,7 @@ public class HbnCategoryRepository implements CategoryRepository {
     }
 
     @Override
-    public Optional<Category> getCategoryById(int id) {
+    public Optional<Category> findCategoryById(int id) {
         return crudRepository.optional(
                 "from Category where id = :fId",
                 Category.class,

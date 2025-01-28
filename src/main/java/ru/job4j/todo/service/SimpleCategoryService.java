@@ -20,12 +20,12 @@ public class SimpleCategoryService implements CategoryService {
     }
 
     @Override
-    public Optional<Category> getCategoryByName(String name) {
-        return categoryRepository.getCategoryByName(name);
+    public Optional<Category> findCategoryByName(String name) {
+        return categoryRepository.findCategoryByName(name);
     }
 
     @Override
-    public Optional<Category> getCategoryById(int id) {
-        return categoryRepository.getCategoryById(id);
+    public Optional<Category> findCategoryById(int id) {
+        return categoryRepository.findCategoryById(id);
     }
 }

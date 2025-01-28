@@ -9,6 +9,6 @@ public interface PriorityService {
 
     List<Priority> findAll();
 
-    Optional<Priority> getPriorityByName(String name);
+    Optional<Priority> findPriorityByName(String name);
 
 }

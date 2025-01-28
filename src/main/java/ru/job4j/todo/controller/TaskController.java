@@ -85,9 +85,9 @@ public class TaskController {
             task.setCategories(new ArrayList<>());
         }
         if (isUrgentlyTask) {
-            task.setPriority(priorityService.getPriorityByName("urgently").get());
+            task.setPriority(priorityService.findPriorityByName("urgently").get());
         } else {
-            task.setPriority(priorityService.getPriorityByName("normal").get());
+            task.setPriority(priorityService.findPriorityByName("normal").get());
         }
         taskService.save(task);
         return "redirect:/tasks/allTasks";
@@ -135,9 +135,9 @@ public class TaskController {
                          @RequestParam(name = "priority_status", defaultValue = "false") boolean isUrgentlyTask) {
         AddUserModel.checkInMenu(model, session);
         if (isUrgentlyTask) {
-            task.setPriority(priorityService.getPriorityByName("urgently").get());
+            task.setPriority(priorityService.findPriorityByName("urgently").get());
         } else {
-            task.setPriority(priorityService.getPriorityByName("normal").get());
+            task.setPriority(priorityService.findPriorityByName("normal").get());
         }
         boolean isUpdated = taskService.update(task);
         if (!isUpdated) {

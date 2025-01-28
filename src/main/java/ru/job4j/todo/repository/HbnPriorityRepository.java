@@ -22,7 +22,7 @@ public class HbnPriorityRepository implements PriorityRepository {
     }
 
     @Override
-    public Optional<Priority> getPriorityByName(String name) {
+    public Optional<Priority> findPriorityByName(String name) {
         return crudRepository.optional(
                 "from Priority where name = :fName",
                 Priority.class,
